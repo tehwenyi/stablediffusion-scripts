@@ -94,4 +94,3 @@ For more information on available parameters, please refer to the respective scr
 
 ## To-Do List
 - [ ] Add Dockerfile
-# stablediffusion-scripts
