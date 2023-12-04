@@ -1,0 +1,8 @@
+# Ignore weights
+/checkpoints/
+
+# Ignore logs
+/logs/
+
+# Ignore outputs
+/outputs/
