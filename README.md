@@ -33,6 +33,7 @@ Collection of scripts to simplify the use of stable diffusion models, specifical
 
    ```bash
    pip install diffusers transformers accelerate --upgrade
+   pip install xformers==0.0.22
    ```
 
 ## Usage
