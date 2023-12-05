@@ -6,3 +6,6 @@
 
 # Ignore outputs
 /outputs/
+
+__pycache__/
+*.pyc
