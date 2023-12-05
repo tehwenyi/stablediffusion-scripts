@@ -5,7 +5,7 @@
 /logs/
 
 # Ignore outputs
-/outputs/
+/output/
 
 __pycache__/
 *.pyc
