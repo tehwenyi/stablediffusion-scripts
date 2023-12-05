@@ -38,59 +38,55 @@ Collection of scripts to simplify the use of stable diffusion models, specifical
 
 ## Usage
 
+This repository contains Python code for generating images using various models. The supported models are:
+
+- SDXL Text-to-Image (sdxl-txt2img)
+- SDXL Image-to-Image (sdxl-img2img)
+- SDXLturbo Text-to-Image (sdxlturbo-txt2img)
+- SDXLturbo Image-to-Image (sdxlturbo-img2img)
+
 Requirement: `torch >= 2.0`
 
-Tested on `Python 3.10`.
+Tested on `Python 3.10`
 
 ### Download Weights
 
-Download the latest weights for the following components into the checkpoints folder:
+Download the latest weights for the following components into the `checkpoints` folder:
 
 - Latest weights for base are [here](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/tree/main). As of 4 Dec 2023, the latest weights are `sd_xl_base_1.0.safetensors` (used by SDXL Turbo).
 - Latest weights for refiner are [here](https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/tree/main). As of 4 Dec 2023, the latest weights are `sd_xl_refiner_1.0.safetensors` (optional, used by SDXL Text to Image).
 
-### SDXL
+### Command-line Arguments
 
-#### Text to Image
-- Requires text prompt only
-- Consists of 2 components: [base](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) and [refiner](https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0). You may choose to use only the base or allow the base to generate an image which will then be run through the refiner for better results.
+The script `generate_images.py` takes the following command-line arguments:
 
-Example:
+`--model-name`: Name of the model to use (choose from: sdxl-txt2img, sdxl-img2img, sdxlturbo-txt2img, sdxlturbo-img2img).
+`--prompt`: Prompt for image generation.
+`--negative-prompt`: Negative prompt for image generation (default: '').
+`--init-image-path`: Path of the image for img2img generation.
+`--strength`: Strength for image generation, a float between 0.0 and 1.0 (default: 0.5).
+`--high-noise-frac`: High noise fraction for image generation (default: 0).
+`--n-steps`: Number of steps for image generation (default: 40).
+`--num-samples`: Number of samples to generate (default: 1).
+`--output-path`: Output path for saving generated images (default: 'output/[model-name]/').
+`--log-path`: Output path for the log file (default: 'logs/[model-name]_log.txt').
+`--base-only`: Only generate an image through the base (default: False).
+
+### Examples
+
+#### Generate Image using SDXL Text-to-Image
+
 ```bash
-python3 sdxl_txt2img.py --prompt "A cinematic shot of a baby racoon wearing an intricate italian priest robe." --num-samples 5
+python generate_images.py --model-name sdxl-txt2img --prompt "Your text prompt here"
 ```
 
-#### Image to Image
-- Requires both a text and an image prompt
+#### Generate Image using SDXL Image-to-Image
 
-Example:
 ```bash
-python3 sdxl_img2img.py --prompt "A cinematic shot of a baby racoon wearing an intricate italian priest robe." --init-image-path "example-racoon.png" --num-samples 5
+python generate_images.py --model-name sdxl-img2img --prompt "Your text prompt here" --init-image-path "/path/to/your/image.png"
 ```
 
-### SDXL Turbo
-
-#### Text to Image
-- Requires text prompt only
-
-Example:
-```bash
-python3 sdxl-turbo_txt2img.py --prompt "A cinematic shot of a baby racoon wearing an intricate italian priest robe." --num-samples 5
-```
-
-Note (from [here](https://huggingface.co/stabilityai/sdxl-turbo)): SDXL-Turbo does not make use of `guidance_scale` or `negative_prompt`, we disable it with `guidance_scale=0.0`. Preferably, the model generates images of size `512x512` but higher image sizes work as well. A single step is enough to generate high quality images.
-
-#### Image to Image
-- Requires both a text and an image prompt
-
-Example:
-```bash
-python3 sdxl-turbo_img2img.py --prompt "A cinematic shot of a baby racoon wearing an intricate italian priest robe." --init-image-path "example-racoon.png" --num-samples 5
-```
-
-Note (from [here](https://huggingface.co/stabilityai/sdxl-turbo)): When using SDXL-Turbo for image-to-image generation, make sure that `num_inference_steps` * `strength` is larger or equal to `1`. The image-to-image pipeline will run for `int(num_inference_steps * strength)` steps, e.g. `0.5 * 2.0 = 1` step in the default parameters.
-
-For more information on available parameters, please refer to the respective scripts.
+Alternatively, refer to the bash script `run_generate_images.sh`.
 
 ## To-Do List
 - [ ] Add Dockerfile
