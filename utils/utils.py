@@ -91,16 +91,16 @@ def _add_text_into_image(prompt_image, text, prompt_image_width):
     prompt_draw = ImageDraw.Draw(prompt_image)
 
     # Font size scaling with image size
-    font_size = int(0.06 * prompt_image_width)
+    font_size = int(0.05 * prompt_image_width)
     font = ImageFont.truetype("DejaVuSans.ttf", font_size) # one of the linux fonts
 
     # Wrap text
-    wrapped_text = textwrap.fill(text, width=((prompt_image_width - 20) // font.getlength("A")))
+    wrapped_text = textwrap.fill(text, width=((prompt_image_width - 10) // font.getlength("A")))
 
     # Position of the text
     # Magic numbers, our favourite thing in the world
-    x_position = 10
-    y_position = 10
+    x_position = 5
+    y_position = 0
 
     prompt_draw.text((x_position, y_position), wrapped_text, fill=(0, 0, 0), font=font)
 
