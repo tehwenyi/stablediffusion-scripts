@@ -8,9 +8,20 @@ class SDXLTxt2Img(BaseImageGenerator):
     def initialize_model(self):
         """Initialize base and refiner models."""
         # base_args = {"pretrained_model_or_path": "stabilityai/stable-diffusion-xl-base-1.0", "use_safetensors": True}
-        base_args = {"pretrained_model_or_path": "/models/stable-diffusion-xl-base-1.0", "use_safetensors": True}
+        base_args = {"pretrained_model_or_path": "stabilityai/stable-diffusion-xl-base-1.0", "use_safetensors": True}
         refiner_args = {"pretrained_model_or_path": "stabilityai/stable-diffusion-xl-refiner-1.0", "use_safetensors": True}
         
+        if self.local_weights_path:
+            if self.base_only:
+                assert len(self.local_weights_path) == 1, "If --base-only is indicated, please provide only a single local weights path for the base model."
+
+                base_args.update({"pretrained_model_or_path": self.local_weights_path[0]})
+            else:
+                assert len(self.local_weights_path) == 2, "Please provide two local weights paths, one for the base model and one for the refiner model."
+
+                base_args.update({"pretrained_model_or_path": self.local_weights_path[0]})
+                refiner_args.update({"pretrained_model_or_path": self.local_weights_path[1]})
+
         if self.use_fp16:
             base_args.update({"torch_dtype": torch.float16, "variant": "fp16"})
             refiner_args.update({"torch_dtype": torch.float16, "variant": "fp16"})
@@ -34,8 +45,10 @@ class SDXLTxt2Img(BaseImageGenerator):
 
         if torch.cuda.is_available():
             base.to("cuda")
+            base.enable_model_cpu_offload()
             if refiner is not None:
                 refiner.to("cuda")
+                refiner.enable_model_cpu_offload()
         else:
             print("CUDA is not available. Running on CPU.")
 
