@@ -1,17 +1,17 @@
 import torch
 
-from diffusers import StableDiffusionXLImg2ImgPipeline
+from diffusers import AutoPipelineForImage2Image
 from .base_image_generator import BaseImageGenerator
 
-class SDXLImg2Img(BaseImageGenerator):
+class SDXLTurboImg2Img(BaseImageGenerator):
     def initialize_model(self):
         """Initialize img2img model."""
-        pipe = StableDiffusionXLImg2ImgPipeline.from_pretrained(
-            "stabilityai/stable-diffusion-xl-refiner-1.0", 
-            torch_dtype=torch.float16, 
-            variant="fp16", 
-            use_safetensors=True
-            )
+        args = {"model_id": "stabilityai/sdxl-turbo"}
+
+        if self.use_fp16:
+            args.update({"torch_dtype": torch.float16, "variant": "fp16"})
+
+        pipe = AutoPipelineForImage2Image.from_pretrained(**args)
 
         if torch.cuda.is_available():
             pipe.to("cuda")
@@ -35,13 +35,13 @@ class SDXLImg2Img(BaseImageGenerator):
             raise ValueError(error_message)
 
         images = base(
-            self.prompt,
-            negative_prompt=self.negative_prompt,
-            image=self.init_image,
-            strength=self.strength,
-            denoising_end=self.high_noise_frac,
-            num_inference_steps=self.n_steps,
+            self.prompt, 
+            image=self.init_image, 
+            num_inference_steps=self.n_steps, 
+            strength=self.strength, 
+            guidance_scale=0.0,
             num_images_per_prompt=self.num_samples
         ).images
 
         return images
+    

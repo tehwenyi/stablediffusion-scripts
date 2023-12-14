@@ -3,7 +3,7 @@ import math
 from utils.utils import log_generation_info, save_images_and_prompt_grid, save_images, create_timestamp, create_folder, load_image_from_path, start_timer, stop_timer
 
 class BaseImageGenerator:
-    def __init__(self, prompt, negative_prompt, n_steps, init_image_path, output_path, strength, log_path, num_samples, high_noise_frac, base_only=None, lora_weights=None):
+    def __init__(self, prompt, negative_prompt, n_steps, init_image_path, output_path, strength, log_path, num_samples, high_noise_frac, use_fp16=False, lora_weights=None, base_only=None):
         # self.model_name = model_name
         self.prompt = prompt
         self.negative_prompt = negative_prompt
@@ -24,9 +24,10 @@ class BaseImageGenerator:
         self.num_samples = num_samples
         self.timestamp = create_timestamp()
         self.grid_image_path = self.output_folder / (self.timestamp + "grid.png")
-        self.base_only = base_only
         self.high_noise_frac = high_noise_frac
+        self.use_fp16 = use_fp16
         self.lora_weights = lora_weights
+        self.base_only = base_only
 
     def initialize_model(self):
         raise NotImplementedError("Subclasses must implement the initialize_model method.")

@@ -1,4 +1,4 @@
-# docker build -t dreambooth .
+# docker build -t sd-scripts .
 
 FROM nvcr.io/nvidia/pytorch:23.06-py3
 
@@ -31,5 +31,6 @@ RUN rm -rf /var/cache/apt/archives/
 RUN apt-get update && apt-get install -y python3-pip
 RUN python3 -m pip install --upgrade pip setuptools
 
-COPY requirements.txt requirements.txt
+ADD build/ /build
+WORKDIR /build
 RUN pip install -r requirements.txt

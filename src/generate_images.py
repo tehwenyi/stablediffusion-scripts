@@ -17,8 +17,9 @@ if __name__ == "__main__":
     parser.add_argument("--num-samples", type=int, default=1, help="Number of samples to generate (default: 1)")
     parser.add_argument("--output-path", type=str, default=None, help="Output path for saving generated images (default: 'output/[model-name]/')")
     parser.add_argument("--log-path", type=str, default=None, help="Output path for the log file (default: 'logs/[model-name]_log.txt')")
-    parser.add_argument("--base-only", action="store_true", help="Only generate image through the base (default: False)")
+    parser.add_argument("--use-fp16", action="store_true", help="Load weights from a specified variant filename 'fp16' (default: False)")
     parser.add_argument("--load-lora-weights", type=str, default=None, help="Specify the path to the LORA weights for loading into the txt2img model (if any) (default: None)")
+    parser.add_argument("--base-only", action="store_true", help="Only generate image through the base (default: False)")
 
     args = parser.parse_args()
 
@@ -36,8 +37,9 @@ if __name__ == "__main__":
             log_path=log_path,
             num_samples=args.num_samples,
             high_noise_frac=args.high_noise_frac,
+            use_fp16=args.use_fp16,
+            lora_weights=args.load_lora_weights,
             base_only=args.base_only,
-            lora_weights=args.load_lora_weights
         )
 
     elif args.model_name == "sdxl-img2img":
@@ -50,7 +52,8 @@ if __name__ == "__main__":
             n_steps=args.n_steps,
             high_noise_frac=args.high_noise_frac,
             log_path=log_path,
-            num_samples=args.num_samples
+            num_samples=args.num_samples,
+            use_fp16=args.use_fp16,
         )
 
     elif args.model_name == "sdxlturbo-txt2img":
@@ -64,7 +67,8 @@ if __name__ == "__main__":
             high_noise_frac=args.high_noise_frac,
             log_path=log_path,
             num_samples=args.num_samples,
-            lora_weights=args.load_lora_weights
+            use_fp16=args.use_fp16,
+            lora_weights=args.load_lora_weights,
         )
     
     elif args.model_name == "sdxlturbo-img2img":
@@ -77,7 +81,8 @@ if __name__ == "__main__":
             n_steps=args.n_steps,
             high_noise_frac=args.high_noise_frac,
             log_path=log_path,
-            num_samples=args.num_samples
+            num_samples=args.num_samples,
+            use_fp16=args.use_fp16,
         )
 
     else:

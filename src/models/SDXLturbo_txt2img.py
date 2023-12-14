@@ -7,7 +7,12 @@ from .base_image_generator import BaseImageGenerator
 class SDXLTurboTxt2Img(BaseImageGenerator):
     def initialize_model(self):
         """Initialize base and refiner models."""
-        pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/sdxl-turbo", torch_dtype=torch.float16, variant="fp16")
+        args = {"model_id": "stabilityai/sdxl-turbo"}
+
+        if self.use_fp16:
+            args.update({"torch_dtype": torch.float16, "variant": "fp16"})
+        
+        pipe = AutoPipelineForText2Image.from_pretrained(**args)
 
         if self.lora_weights:
             lora_path = Path(self.lora_weights)

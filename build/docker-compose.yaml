@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  sd-scripts:
+    image: sd-scripts:0.0.1
+    build:
+      context: ../
+      dockerfile: build/Dockerfile
+    stdin_open: true
+    tty: true
+    ulimits:
+      memlock: -1
+    shm_size: 32gb
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0', '1', '2', '3']
+              capabilities: [gpu]
+    volumes:
+      - ../../diffusers/models/:/models
+      - ../data/:/data
+      - ../src/:/src
