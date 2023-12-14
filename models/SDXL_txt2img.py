@@ -1,18 +1,25 @@
 import torch
+from pathlib import Path
 
-from diffusers import DiffusionPipeline
+from diffusers import AutoPipelineForText2Image, AutoPipelineForImage2Image
 from .base_image_generator import BaseImageGenerator
 
 class SDXLTxt2Img(BaseImageGenerator):
     def initialize_model(self):
         """Initialize base and refiner models."""
-        base = DiffusionPipeline.from_pretrained(
+        base = AutoPipelineForText2Image.from_pretrained(
             "stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True
         )
+
+        if self.lora_weights:
+            lora_path = Path(self.lora_weights)
+            lora_folder = str(lora_path.parent)
+            lora_filename = str(lora_path.name)
+            base.load_lora_weights(lora_folder, weight_name=lora_filename)
         
         refiner = None
         if not self.base_only:
-            refiner = DiffusionPipeline.from_pretrained(
+            refiner = AutoPipelineForImage2Image.from_pretrained(
                 "stabilityai/stable-diffusion-xl-refiner-1.0",
                 text_encoder_2=base.text_encoder_2,
                 vae=base.vae,
@@ -41,7 +48,7 @@ class SDXLTxt2Img(BaseImageGenerator):
                 prompt=self.prompt,
                 negative_prompt=self.negative_prompt,
                 num_inference_steps=self.n_steps,
-                denoising_end=self.high_noise_frac,
+                # denoising_end=self.high_noise_frac,
                 output_type="latent",
                 num_images_per_prompt=self.num_samples
             ).images
@@ -50,7 +57,7 @@ class SDXLTxt2Img(BaseImageGenerator):
                 prompt=self.prompt,
                 negative_prompt=self.negative_prompt,
                 num_inference_steps=self.n_steps,
-                denoising_start=self.high_noise_frac,
+                # denoising_start=self.high_noise_frac,
                 image=base_output,
                 num_images_per_prompt=self.num_samples
             ).images

@@ -18,6 +18,7 @@ if __name__ == "__main__":
     parser.add_argument("--output-path", type=str, default=None, help="Output path for saving generated images (default: 'output/[model-name]/')")
     parser.add_argument("--log-path", type=str, default=None, help="Output path for the log file (default: 'logs/[model-name]_log.txt')")
     parser.add_argument("--base-only", action="store_true", help="Only generate image through the base (default: False)")
+    parser.add_argument("--load-lora-weights", type=str, default=None, help="Specify the path to the LORA weights for loading into the txt2img model (if any) (default: None)")
 
     args = parser.parse_args()
 
@@ -35,7 +36,9 @@ if __name__ == "__main__":
             log_path=log_path,
             num_samples=args.num_samples,
             high_noise_frac=args.high_noise_frac,
-            base_only=args.base_only)
+            base_only=args.base_only,
+            lora_weights=args.load_lora_weights
+        )
 
     elif args.model_name == "sdxl-img2img":
         generator = SDXLImg2Img(
@@ -47,7 +50,8 @@ if __name__ == "__main__":
             n_steps=args.n_steps,
             high_noise_frac=args.high_noise_frac,
             log_path=log_path,
-            num_samples=args.num_samples)
+            num_samples=args.num_samples
+        )
 
     elif args.model_name == "sdxlturbo-txt2img":
         generator = SDXLTurboTxt2Img(
@@ -59,7 +63,8 @@ if __name__ == "__main__":
             n_steps=args.n_steps,
             high_noise_frac=args.high_noise_frac,
             log_path=log_path,
-            num_samples=args.num_samples
+            num_samples=args.num_samples,
+            lora_weights=args.load_lora_weights
         )
     
     elif args.model_name == "sdxlturbo-img2img":
@@ -72,7 +77,8 @@ if __name__ == "__main__":
             n_steps=args.n_steps,
             high_noise_frac=args.high_noise_frac,
             log_path=log_path,
-            num_samples=args.num_samples)
+            num_samples=args.num_samples
+        )
 
     else:
         raise ValueError(f"Unsupported model name: {args.model_name}")

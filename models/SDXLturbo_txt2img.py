@@ -1,4 +1,5 @@
 import torch
+from pathlib import Path
 
 from diffusers import AutoPipelineForText2Image
 from .base_image_generator import BaseImageGenerator
@@ -7,6 +8,12 @@ class SDXLTurboTxt2Img(BaseImageGenerator):
     def initialize_model(self):
         """Initialize base and refiner models."""
         pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/sdxl-turbo", torch_dtype=torch.float16, variant="fp16")
+
+        if self.lora_weights:
+            lora_path = Path(self.lora_weights)
+            lora_folder = str(lora_path.parent)
+            lora_filename = str(lora_path.name)
+            pipe.load_lora_weights(lora_folder, weight_name=lora_filename)
 
         if torch.cuda.is_available():
             pipe.to("cuda")
