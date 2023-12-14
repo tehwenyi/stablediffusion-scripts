@@ -70,6 +70,8 @@ The script `generate_images.py` takes the following command-line arguments:
 `--num-samples`: Number of samples to generate (default: 1).
 `--output-path`: Output path for saving generated images (default: 'output/[model-name]/').
 `--log-path`: Output path for the log file (default: 'logs/[model-name]_log.txt').
+`--use-fp16`: Load weights from a specified variant filename 'fp16' (default: False).
+`--load-lora-weights`: Specify the path to the LORA weights for loading into the txt2img model (if any) (default: None).
 `--base-only`: Only generate an image through the base (default: False).
 
 ### Examples
@@ -89,4 +91,6 @@ python generate_images.py --model-name sdxl-img2img --prompt "Your text prompt h
 Alternatively, refer to the bash script `run_generate_images.sh`.
 
 ## To-Do List
-- [ ] Add Dockerfile
+- [x] Add Dockerfile
+- [ ] Add lora information into log file
+- [ ] Allow loading model weights from local folder
