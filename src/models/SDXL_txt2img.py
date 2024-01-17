@@ -44,10 +44,10 @@ class SDXLTxt2Img(BaseImageGenerator):
             )
 
         if torch.cuda.is_available():
-            base.to("cuda")
+            # base.to("cuda")
             base.enable_model_cpu_offload()
             if refiner is not None:
-                refiner.to("cuda")
+                # refiner.to("cuda")
                 refiner.enable_model_cpu_offload()
         else:
             print("CUDA is not available. Running on CPU.")

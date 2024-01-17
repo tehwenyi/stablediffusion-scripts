@@ -72,7 +72,7 @@ The script `generate_images.py` takes the following command-line arguments:
 `--log-path`: Output path for the log file (default: 'logs/[model-name]_log.txt').
 `--use-fp16`: Load weights from a specified variant filename 'fp16' (default: False).
 `--local-weights-path`: Local file path(s) for the model weights (optional, please indicate both paths if using base and refiner for SDXL_txt2img).
-`--load-lora-weights`: Specify the path to the LORA weights for loading into the txt2img model (if any) (default: None).
+`--lora-weights`: Specify the path to the LORA weights for loading into the txt2img model (if any) (default: None).
 `--base-only`: Only generate an image through the base (default: False).
 
 ### Examples
