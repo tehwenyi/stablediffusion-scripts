@@ -33,4 +33,6 @@ RUN python3 -m pip install --upgrade pip setuptools
 
 ADD build/ /build
 WORKDIR /build
-RUN pip install -r requirements.txt && pip uninstall pillow && pip install --no-cache-dir pillow
+RUN pip install -r requirements.txt && pip uninstall -y pillow && pip install --no-cache-dir pillow
+
+WORKDIR /src
